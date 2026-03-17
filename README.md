@@ -30,8 +30,8 @@ AgriscaleContainer provides a reproducible, containerized environment for runnin
 
 ### Prerequisites
 
-- Docker or Singularity
-- Linux environment (recommended) or WSL2 on Windows
+- Docker and Singularity
+- Linux environment or WSL2 on Windows
 - .NET 5.0+ SDK (for building from source)
 - Make
 
@@ -39,7 +39,7 @@ AgriscaleContainer provides a reproducible, containerized environment for runnin
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/AgriscaleContainer.git
+git clone https://github.com/CropModelingPlatform/AgriscaleContainer.git
 cd AgriscaleContainer
 
 # Build all components
