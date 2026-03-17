@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use AgriscaleContainer in your research, please cite it as below."
+authors:
+  - family-names: "Midingoyi"
+    given-names: "Cyrille Ahmed"
+    email: "cyrille_ahmed.midingoyi@cirad.fr"
+    affiliation: "CIRAD"
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # Update with your ORCID if available
+title: "AgriscaleContainer: Multi-Model Crop Simulation Environment"
+version: 1.0.0
+date-released: 2026-03-17
+url: "https://github.com/YOUR_USERNAME/AgriscaleContainer"
+repository-code: "https://github.com/YOUR_USERNAME/AgriscaleContainer"
+license: MIT
+keywords:
+  - crop modeling
+  - agricultural systems
+  - APSIM
+  - DSSAT
+  - STICS
+  - containerization
+  - Docker
+  - Singularity
+  - reproducible research
+abstract: >
+  AgriscaleContainer provides a containerized environment for running
+  multiple crop simulation models (APSIM, DSSAT, STICS) in a unified
+  framework. It facilitates reproducible research, model intercomparison
+  studies, and large-scale agricultural simulations.
+references:
+  - type: software
+    authors:
+      - name: "APSIM Initiative"
+    title: "APSIM - Agricultural Production Systems sIMulator"
+    url: "https://www.apsim.info"
+  - type: software
+    authors:
+      - name: "DSSAT Foundation"
+    title: "DSSAT - Decision Support System for Agrotechnology Transfer"
+    url: "https://dssat.net"
+  - type: software
+    authors:
+      - name: "INRAE"
+    title: "STICS - Soil-Crop Model"
+    url: "https://www6.paca.inrae.fr/stics"

@@ -1,0 +1,137 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION_5: '5.0.x'
+  DOTNET_VERSION_8: '8.0.x'
+
+jobs:
+  build-components:
+    name: Build Components
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        component: [datamill, celsius, apsim, dssat]
+      fail-fast: false
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          
+      - name: Setup .NET 5.0
+        if: matrix.component == 'datamill' || matrix.component == 'celsius'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION_5 }}
+          
+      - name: Setup .NET 8.0
+        if: matrix.component == 'apsim'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION_8 }}
+          
+      - name: Install Fortran compiler
+        if: matrix.component == 'dssat'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran cmake
+          
+      - name: Install Java
+        if: matrix.component == 'stics'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          
+      - name: Build ${{ matrix.component }}
+        run: |
+          make clean_${{ matrix.component }} || make clean
+          make build_${{ matrix.component }} || make build
+        continue-on-error: ${{ matrix.component == 'dssat' }}
+        
+      - name: Check build artifacts
+        run: |
+          if [ -d "bin/${{ matrix.component }}" ]; then
+            echo "✓ Build successful for ${{ matrix.component }}"
+            ls -lh bin/${{ matrix.component }}/ || true
+          else
+            echo "⚠ Build directory not found for ${{ matrix.component }}"
+          fi
+          
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.component }}-build
+          path: bin/${{ matrix.component }}/
+          retention-days: 7
+          
+  build-docker:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: build-components
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Build Docker image
+        run: |
+          docker build -t agriscale:${{ github.sha }} -f Dockerfile .
+        continue-on-error: true
+        
+      - name: Test Docker image
+        if: success()
+        run: |
+          docker images | grep agriscale
+          
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Check LICENSE files
+        run: |
+          echo "Checking LICENSE files..."
+          test -f LICENSE || { echo "❌ LICENSE file missing"; exit 1; }
+          test -f THIRD-PARTY-NOTICES.md || { echo "❌ THIRD-PARTY-NOTICES.md missing"; exit 1; }
+          echo "✓ License files present"
+          
+      - name: Check documentation
+        run: |
+          echo "Checking documentation..."
+          test -f README.md || { echo "❌ README.md missing"; exit 1; }
+          test -f CONTRIBUTING.rst || { echo "❌ CONTRIBUTING.rst missing"; exit 1; }
+          echo "✓ Documentation files present"
+          
+      - name: Check Makefile targets
+        run: |
+          echo "Checking Makefile targets..."
+          grep -q "build_apsim" Makefile || echo "⚠ build_apsim target not found"
+          grep -q "build_dssat" Makefile || echo "⚠ build_dssat target not found"
+          grep -q "build:" Makefile || echo "⚠ build target not found"
+          echo "✓ Makefile check complete"
+          
+      - name: Validate CITATION.cff
+        uses: citation-file-format/cffconvert-github-action@2.0.0
+        with:
+          args: "--validate"
+        continue-on-error: true

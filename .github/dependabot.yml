@@ -1,0 +1,65 @@
+version: 2
+updates:
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "build"
+      
+  # .NET NuGet (for datamill and celsius)
+  - package-ecosystem: "nuget"
+    directory: "/src/datamill"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "dotnet"
+      - "datamill"
+    commit-message:
+      prefix: "deps"
+    ignore:
+      # Ignore major version updates to maintain compatibility
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+        
+  - package-ecosystem: "nuget"
+    directory: "/src/celsius"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "dotnet"
+      - "celsius"
+    commit-message:
+      prefix: "deps"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Note: APSIM and DSSAT are tracked as Git submodules
+  # We don't automatically update them as they require manual testing
+  # and license verification

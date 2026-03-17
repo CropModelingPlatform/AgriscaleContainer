@@ -1,0 +1,172 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.md'
+      - '**.rst'
+      - 'CITATION.cff'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**.md'
+      - '**.rst'
+      - 'CITATION.cff'
+  workflow_dispatch:
+
+jobs:
+  markdown-lint:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v14
+        with:
+          globs: |
+            **/*.md
+            !**/node_modules
+            !**/ApsimX
+            !**/dssat_csm_develop
+        continue-on-error: true
+        
+  link-checker:
+    name: Check Links
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Check links in markdown files
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          use-verbose-mode: 'no'
+          config-file: '.github/markdown-link-check-config.json'
+          folder-path: '.'
+          file-path: './README.md, ./CONTRIBUTING.rst, ./THIRD-PARTY-NOTICES.md'
+        continue-on-error: true
+        
+  citation-validation:
+    name: Validate CITATION.cff
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Validate CITATION.cff
+        uses: citation-file-format/cffconvert-github-action@2.0.0
+        with:
+          args: "--validate"
+          
+      - name: Convert to BibTeX
+        uses: citation-file-format/cffconvert-github-action@2.0.0
+        with:
+          args: "--format bibtex"
+          
+  readme-quality:
+    name: README Quality Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Check README sections
+        run: |
+          echo "Checking README.md for required sections..."
+          
+          REQUIRED_SECTIONS=(
+            "Overview"
+            "Quick Start"
+            "Licensing"
+            "Citation"
+          )
+          
+          for section in "${REQUIRED_SECTIONS[@]}"; do
+            if grep -qi "$section" README.md; then
+              echo "✓ Section '$section' found"
+            else
+              echo "⚠ Section '$section' missing or misspelled"
+            fi
+          done
+          
+      - name: Check for placeholder text
+        run: |
+          echo "Checking for placeholder text..."
+          
+          if grep -q "YOUR_USERNAME" README.md; then
+            echo "⚠ Found 'YOUR_USERNAME' placeholder in README.md"
+            grep -n "YOUR_USERNAME" README.md
+          else
+            echo "✓ No placeholders found"
+          fi
+          
+      - name: Check third-party notices
+        run: |
+          echo "Checking THIRD-PARTY-NOTICES.md..."
+          
+          if [ ! -f "THIRD-PARTY-NOTICES.md" ]; then
+            echo "❌ THIRD-PARTY-NOTICES.md not found"
+            exit 1
+          fi
+          
+          # Check for model licenses
+          for model in "APSIM" "DSSAT" "STICS"; do
+            if grep -q "$model" THIRD-PARTY-NOTICES.md; then
+              echo "✓ $model license documented"
+            else
+              echo "⚠ $model license not found in THIRD-PARTY-NOTICES.md"
+            fi
+          done
+          
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          
+      - name: Check license files
+        run: |
+          echo "Checking for license files..."
+          
+          # Main project license
+          test -f LICENSE || { echo "❌ LICENSE file missing"; exit 1; }
+          echo "✓ Main LICENSE file present"
+          
+          # APSIM license
+          test -f ApsimX/LICENSE.md || echo "⚠ ApsimX/LICENSE.md not found"
+          
+          # DSSAT license
+          test -f dssat_csm_develop/license.txt || echo "⚠ dssat_csm_develop/license.txt not found"
+          
+          # Third-party notices
+          test -f THIRD-PARTY-NOTICES.md || { echo "❌ THIRD-PARTY-NOTICES.md missing"; exit 1; }
+          echo "✓ THIRD-PARTY-NOTICES.md present"
+          
+      - name: Verify LICENSE scope statement
+        run: |
+          echo "Checking LICENSE scope statement..."
+          
+          if grep -q "SCOPE OF THIS LICENSE" LICENSE; then
+            echo "✓ LICENSE contains scope statement"
+          else
+            echo "⚠ LICENSE missing scope clarification"
+          fi
+          
+          if grep -q "third-party" LICENSE || grep -q "Third-party" LICENSE; then
+            echo "✓ LICENSE references third-party software"
+          else
+            echo "⚠ LICENSE should reference third-party components"
+          fi

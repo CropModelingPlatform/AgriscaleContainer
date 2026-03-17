@@ -1,0 +1,161 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+          
+      - name: Get version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION=${{ inputs.version }}
+          else
+            VERSION=${GITHUB_REF#refs/tags/}
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Release version: $VERSION"
+          
+      - name: Setup .NET 5.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '5.0.x'
+          
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran cmake zip
+          
+      - name: Build all components
+        run: |
+          make clean || true
+          make build || true
+          make build_celsius || true
+          make build_apsim || true
+        continue-on-error: true
+        
+      - name: Package binaries
+        run: |
+          mkdir -p release-artifacts
+          
+          # Package datamill
+          if [ -d "bin/datamill" ]; then
+            cd bin/datamill && tar -czf ../../release-artifacts/datamill-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz * && cd ../..
+          fi
+          
+          # Package celsius
+          if [ -d "bin/celsius" ]; then
+            cd bin/celsius && tar -czf ../../release-artifacts/celsius-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz * && cd ../..
+          fi
+          
+          # Package APSIM
+          if [ -d "bin/apsim" ]; then
+            cd bin/apsim && tar -czf ../../release-artifacts/apsim-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz * && cd ../..
+          fi
+          
+          # Create documentation archive
+          tar -czf release-artifacts/docs-${{ steps.get_version.outputs.version }}.tar.gz README.md LICENSE THIRD-PARTY-NOTICES.md CONTRIBUTING.rst AUTHORS.rst CITATION.cff
+          
+          ls -lh release-artifacts/
+          
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          cat > release-notes.md << 'EOF'
+          ## AgriscaleContainer ${{ steps.get_version.outputs.version }}
+          
+          ### 📦 Pre-built Components
+          
+          This release includes pre-built binaries for Linux x64:
+          - `datamill` - Data processing utility
+          - `celsius` - Climate analysis tool
+          - `apsim` - APSIM simulation engine (subject to APSIM license)
+          
+          ### ⚠️ Important License Information
+          
+          **Container Infrastructure:** MIT License (applies to build system, scripts, datamill, celsius)
+          
+          **Crop Models:** Individual licenses apply
+          - **APSIM:** Academic license - [Read License](https://github.com/${{ github.repository }}/blob/main/ApsimX/LICENSE.md)
+          - **DSSAT:** BSD-3-Clause - [Read License](https://github.com/${{ github.repository }}/blob/main/dssat_csm_develop/license.txt)
+          - **STICS:** CeCILL (GPL-compatible)
+          
+          📄 See [THIRD-PARTY-NOTICES.md](https://github.com/${{ github.repository }}/blob/main/THIRD-PARTY-NOTICES.md) for complete license information.
+          
+          ### 🚀 Quick Start
+          
+          ```bash
+          # Download and extract
+          wget https://github.com/${{ github.repository }}/releases/download/${{ steps.get_version.outputs.version }}/datamill-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz
+          tar -xzf datamill-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz
+          
+          # Run
+          ./datamill --help
+          ```
+          
+          ### 📚 Documentation
+          
+          - [README](https://github.com/${{ github.repository }}/blob/main/README.md)
+          - [Contributing Guidelines](https://github.com/${{ github.repository }}/blob/main/CONTRIBUTING.rst)
+          - [Citation Information](https://github.com/${{ github.repository }}/blob/main/CITATION.cff)
+          
+          ### 🔧 Building from Source
+          
+          ```bash
+          git clone --recursive https://github.com/${{ github.repository }}.git
+          cd AgriscaleContainer
+          make all
+          ```
+          
+          **System Requirements:**
+          - .NET SDK 5.0+ and 8.0
+          - GFortran compiler
+          - CMake
+          - Make
+          
+          EOF
+          
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          name: Release ${{ steps.get_version.outputs.version }}
+          body_path: release-notes.md
+          files: |
+            release-artifacts/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Update latest tag
+        if: success()
+        run: |
+          git tag -f latest
+          git push origin latest --force
+        continue-on-error: true
