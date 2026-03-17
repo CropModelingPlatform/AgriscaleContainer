@@ -49,7 +49,9 @@ make all
 make build_apsim
 make build_dssat
 make build_celsius
+```
 
+---
 
 ## 📁 Project Structure
 
@@ -80,12 +82,12 @@ The build system, scripts, and custom tools (Makefile, Dockerfile, datamill, cel
 
 Each crop modeling system has its own license with **different terms and restrictions**:
 
-| Model | License | Commercial Use | Key Restrictions |
-|-------|---------|----------------|------------------|
-| **APSIM** | Academic License | ❌ No* | Non-transferable; improvements assigned to APSIM Initiative |
-| **DSSAT** | BSD-3-Clause | ✅ Yes | Attribution required; permissive |
-| **STICS** | CeCILL (GPL-compatible) | ⚠️ Generally Yes | Must share modifications if distributed |
-| **CELSIUS** | MIT | ✅ Yes | permissive |
+| Model        | License                  | Commercial Use    | Key Restrictions                                      |
+|--------------|--------------------------|-------------------|-------------------------------------------------------|
+| **APSIM**    | Academic License         | ❌ No*            | Non-transferable; improvements assigned to APSIM      |
+| **DSSAT**    | BSD-3-Clause             | ✅ Yes            | Attribution required; permissive                      |
+| **STICS**    | CeCILL (GPL-compatible)  | ⚠️ Generally Yes  | Must share modifications if distributed               |
+| **CELSIUS**  | MIT                      | ✅ Yes            | Permissive                                            |
 
 \* *Commercial use of APSIM requires a separate license agreement*
 
@@ -157,7 +159,7 @@ If you use AgriscaleContainer in your research, please cite this repository:
   author       = {Midingoyi, Cyrille Ahmed},
   title        = {AgriscaleContainer: Multi-Model Crop Simulation Environment},
   year         = {2026},
-  url          = {https://github.com/YOUR_USERNAME/AgriscaleContainer}
+  url          = {https://github.com/CropModelingPlatform/AgriscaleContainer}
 }
 ```
 
@@ -199,4 +201,4 @@ This software is provided "as is" without warranty of any kind. The crop models 
 
 **Maintainer:** Cyrille Ahmed MIDINGOYI  
 **Last Updated:** March 2026  
-**Repository:** https://github.com/YOUR_USERNAME/AgriscaleContainer
+**Repository:** https://github.com/CropModelingPlatform/AgriscaleContainer
