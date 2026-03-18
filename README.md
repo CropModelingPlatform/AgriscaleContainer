@@ -30,19 +30,41 @@ AgriscaleContainer provides a reproducible, containerized environment for runnin
 
 ### Prerequisites
 
-- Docker and Singularity
-- Linux environment or WSL2 on Windows
+- Docker or Singularity
+- Linux environment (recommended) or WSL2 on Windows
 - .NET 5.0+ SDK (for building from source)
 - Make
+- Git
+
+### Downloading Crop Models
+
+**⚠️ Important:** The crop simulation models are **not included** in this repository. You must download them separately before building.
+
+```bash
+# Clone this repository
+git clone https://github.com/CropModelingPlatform/AgriscaleContainer.git
+cd AgriscaleContainer
+
+# Download required crop models
+make download_models
+# Or directly:
+bash scripts/download_models.sh
+```
+
+**Model Versions Used by AgriscaleContainer:**
+
+| Model | Version | Source | License |
+|-------|---------|--------|---------|
+| **APSIM** | 2024.12.7510.0 | https://github.com/APSIMInitiative/ApsimX | Academic |
+| **DSSAT v4.7** | v4.7.5.6 | https://github.com/DSSAT/dssat-csm-os | BSD-3-Clause |
+| **DSSAT v4.8** | v4.8.5.0 | https://github.com/DSSAT/dssat-csm-os | BSD-3-Clause |
+
+*See `scripts/download_models.sh` for exact versions and download details.*
 
 ### Building the Container
 
 ```bash
-# Clone the repository
-git clone https://github.com/CropModelingPlatform/AgriscaleContainer.git
-cd AgriscaleContainer
-
-# Build all components
+# After downloading models, build all components
 make all
 
 # Or build specific models:
@@ -57,17 +79,20 @@ make build_celsius
 
 ```
 AgriscaleContainer/
-├── ApsimX/              # APSIM model source
-├── dssat_csm_develop/   # DSSAT model source
+├── scripts/
+│   └── download_models.sh  # Script to download crop models
+├── ApsimX/                 # APSIM model source (downloaded)
+├── dssat-csm-os/           # DSSAT v4.8 source (downloaded)
+├── dssat_csm_develop/      # DSSAT v4.7 source (downloaded)
 ├── src/
-│   ├── datamill/        # Custom data processing tool
-│   └── celsius/         # CELSIUS Model source
-├── bin/                 # Compiled binaries (generated)
-├── Makefile             # Build automation
-├── Dockerfile           # Docker configuration
-├── LICENSE              # MIT License for container infrastructure
+│   ├── datamill/           # Custom data processing tool
+│   └── celsius/            # CELSIUS Model source
+├── bin/                    # Compiled binaries (generated)
+├── Makefile                # Build automation
+├── Dockerfile              # Docker configuration
+├── LICENSE                 # MIT License for container infrastructure
 ├── THIRD-PARTY-NOTICES.md  # Third-party model licenses
-└── README.md            # This file
+└── README.md               # This file
 ```
 
 ---

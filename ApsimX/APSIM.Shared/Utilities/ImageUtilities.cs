@@ -1,3 +1,0 @@
-﻿namespace APSIM.Shared.Utilities
-{
-}

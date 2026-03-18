@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Downloaded crop models (use scripts/download_models.sh)
+ApsimX/
+dssat-csm-os/
+dssat_csm_develop/
+
 # C extensions
 *.so
 

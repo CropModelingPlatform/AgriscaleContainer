@@ -27,7 +27,14 @@ DOCKER_RUN=docker run -t -v /etc/timezone:/etc/timezone:ro \
 											--name $(DOCKER_CONTAINER) \
 											$(DOCKER_IMG)
 
+#############
+#  DOWNLOAD MODELS
+##
 
+.PHONY: download_models
+download_models:
+	@echo "Downloading required crop simulation models..."
+	@bash scripts/download_models.sh
 
 #############
 #  DATAMILL
