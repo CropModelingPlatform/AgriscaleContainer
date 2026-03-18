@@ -22,7 +22,7 @@ AgriscaleContainer provides a reproducible, containerized environment for runnin
 - **APSIM** (Agricultural Production Systems sIMulator) - Process-based model for simulating agricultural systems
 - **DSSAT** (Decision Support System for Agrotechnology Transfer) - Crop modeling and decision support
 - **STICS** (via JavaStics) - Soil-crop simulation model with multi-crop capabilities
-- **CELSIUS:** - CEreal and Legume crops Simulator Under Sahelian Environment
+- **CELSIUS:** - CEreal and Legume crops Simulator Under Savanah Environment
 
 ---
 
@@ -30,7 +30,7 @@ AgriscaleContainer provides a reproducible, containerized environment for runnin
 
 ### Prerequisites
 
-- Docker or Singularity
+- Docker and Singularity
 - Linux environment (recommended) or WSL2 on Windows
 - .NET 5.0+ SDK (for building from source)
 - Make

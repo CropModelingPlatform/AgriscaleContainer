@@ -23,7 +23,7 @@ SOFTWARE.
 ---
 
 IMPORTANT NOTICE: Third-Party Components
-=========================================
+========================================
 
 This license applies ONLY to the container infrastructure, build system,
 and custom tools (Makefile, Dockerfile, scripts, datamill).
@@ -44,7 +44,7 @@ subject to their own separate licenses:
    - License: CeCILL (GPL-compatible)
    - See: https://www6.paca.inrae.fr/stics_eng/
 
-4. CELSIUS (CEreal and Legume crops Simulator Under Sahelian Environment)
+4. CELSIUS (CEreal and Legume crops Simulator Under Savanah Environment)
    - License: MIT
 
 For complete third-party license information, see THIRD-PARTY-NOTICES.md
