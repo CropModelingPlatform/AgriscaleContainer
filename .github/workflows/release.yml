@@ -2,38 +2,49 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version (e.g., v1.0.0)'
-        required: true
-        type: string
+    branches:
+      - main
+    paths:
+      - 'version.py'
 
 jobs:
-  create-release:
-    name: Create Release
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          
-      - name: Get version
-        id: get_version
+
+      - name: Read version
+        id: version
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            VERSION=${{ inputs.version }}
-          else
-            VERSION=${GITHUB_REF#refs/tags/}
-          fi
+          VERSION=$(python3 -c "exec(open('version.py').read()); print(__version__)")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Release version: $VERSION"
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: $VERSION"
+
+      - name: Check tag does not already exist
+        id: check_tag
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          if git ls-remote --tags origin "$TAG" | grep -q "$TAG"; then
+            echo "Tag $TAG already exists — skipping release."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create tag and GitHub Release
+        if: steps.check_tag.outputs.skip == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: AgriscaleContainer ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Setup .NET 5.0
         uses: actions/setup-dotnet@v4
