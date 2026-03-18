@@ -44,7 +44,7 @@ RUN curl -fSL --output dotnet8.tar.gz https://dotnetcli.azureedge.net/dotnet/Run
 RUN apt-get purge -y --auto-remove curl
 # COMPILE DSSAT
 # Dssat builder
-FROM debian:bullseye-slim AS builder
+FROM debian:bookworm-slim AS builder
 RUN apt-get update && apt-get install -y build-essential cmake gfortran
 ARG DSSAT_DIR
 COPY $DSSAT_DIR /dssat
