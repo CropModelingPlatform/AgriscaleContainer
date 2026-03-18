@@ -31,13 +31,13 @@ jobs:
           
       - name: Setup .NET 5.0
         if: matrix.component == 'datamill' || matrix.component == 'celsius'
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION_5 }}
           
       - name: Setup .NET 8.0
         if: matrix.component == 'apsim'
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION_8 }}
           

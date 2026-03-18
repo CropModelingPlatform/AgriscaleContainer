@@ -37,12 +37,12 @@ jobs:
 
       # Step 3. Setup .NET (5.0 for datamill/celsius, 8.0 for APSIM)
       - name: Setup .NET 5.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '5.0.x'
 
       - name: Setup .NET 8.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
 
