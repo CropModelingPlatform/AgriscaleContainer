@@ -24,6 +24,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Download crop models
+        if: matrix.component == 'apsim' || matrix.component == 'dssat'
+        run: bash scripts/download_models.sh
           
       - name: Setup .NET 5.0
         if: matrix.component == 'datamill' || matrix.component == 'celsius'
