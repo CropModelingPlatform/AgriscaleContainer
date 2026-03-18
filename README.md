@@ -3,8 +3,8 @@
 **A containerized environment for multi-model crop simulation and agricultural systems analysis**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/YOUR_USERNAME/AgriscaleContainer/workflows/Build%20and%20Test/badge.svg)](https://github.com/YOUR_USERNAME/AgriscaleContainer/actions)
-[![Release](https://img.shields.io/github/v/release/YOUR_USERNAME/AgriscaleContainer)](https://github.com/YOUR_USERNAME/AgriscaleContainer/releases)
+[![Build Status](https://github.com/CropModelingPlatform/AgriscaleContainer/workflows/Build%20and%20Test/badge.svg)](https://github.com/CropModelingPlatform/AgriscaleContainer/actions)
+[![Release](https://img.shields.io/github/v/release/CropModelingPlatform/AgriscaleContainer)](https://github.com/CropModelingPlatform/AgriscaleContainer/releases)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
 [![Models](https://img.shields.io/badge/Models-APSIM%20%7C%20DSSAT%20%7C%20STICS%20%7C%20CELSIUS-green)]()
