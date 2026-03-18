@@ -21,13 +21,24 @@ jobs:
       - name: Download crop models
         run: bash scripts/download_models.sh
 
-      # Step 3. Setup .NET 8.0 for building APSIM
+      # Step 3. Setup .NET (5.0 for datamill/celsius, 8.0 for APSIM)
+      - name: Setup .NET 5.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '5.0.x'
+
       - name: Setup .NET 8.0
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      # Step 4. Build APSIM (populates bin/apsim/ required by Dockerfile COPY)
+      # Step 4. Build all components (populates bin/ dirs required by Dockerfile COPY)
+      - name: Build Datamill
+        run: make build
+
+      - name: Build Celsius
+        run: make build_celsius
+
       - name: Build APSIM
         run: make build_apsim
 
