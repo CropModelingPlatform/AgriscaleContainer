@@ -27,14 +27,11 @@ else
 fi
 
 # DSSAT v4.7.5 (develop branch - for backward compatibility)
-DSSAT_V47_TAG="v4.7.5.6"  # Feb 2019 release
+DSSAT_V47_TAG="v4.7.5.42"
 if [ ! -d "dssat_csm_develop" ]; then
     echo -e "${BLUE}Downloading DSSAT v4.7.5 (develop branch)...${NC}"
-    # Clone the entire repo and checkout specific version
-    git clone https://github.com/DSSAT/dssat-csm-os.git dssat_csm_develop
-    cd dssat_csm_develop
-    git checkout ${DSSAT_V47_TAG} 2>/dev/null || git checkout develop
-    cd ..
+    git clone --depth 1 --branch ${DSSAT_V47_TAG} \
+        https://github.com/DSSAT/dssat-csm-os.git dssat_csm_develop
     echo -e "${GREEN}✓ DSSAT v4.7.5 downloaded${NC}"
 else
     echo -e "${GREEN}✓ DSSAT v4.7.5 already present${NC}"

@@ -56,7 +56,7 @@ bash scripts/download_models.sh
 | Model | Version | Source | License |
 |-------|---------|--------|---------|
 | **APSIM** | 2024.12.7510.0 | https://github.com/APSIMInitiative/ApsimX | Academic |
-| **DSSAT v4.7** | v4.7.5.6 | https://github.com/DSSAT/dssat-csm-os | BSD-3-Clause |
+| **DSSAT v4.7** | v4.7.5.42 | https://github.com/DSSAT/dssat-csm-os | BSD-3-Clause |
 | **DSSAT v4.8** | v4.8.5.0 | https://github.com/DSSAT/dssat-csm-os | BSD-3-Clause |
 
 *See `scripts/download_models.sh` for exact versions and download details.*

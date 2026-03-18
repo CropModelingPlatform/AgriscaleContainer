@@ -14,7 +14,7 @@
    ```
    This downloads:
    - APSIM 2024.12.7510.0 (~200 MB)
-   - DSSAT v4.7.5.6 (~10 MB)
+   - DSSAT v4.7.5.42 (~10 MB)
    - DSSAT v4.8.5.0 (~10 MB)
 
 3. **Build:**
@@ -29,7 +29,7 @@
 | Model | Version | License |
 |-------|---------|---------|
 | APSIM | 2024.12.7510.0 | Academic (non-commercial) |
-| DSSAT v4.7 | v4.7.5.6 (Feb 2019) | BSD-3-Clause |
+| DSSAT v4.7 | v4.7.5.42 | BSD-3-Clause |
 | DSSAT v4.8 | v4.8.5.0 (Dec 2024) | BSD-3-Clause |
 
 ## Notes
