@@ -58,6 +58,12 @@ jobs:
       - name: Build Docker container
         run: make dbuild
 
+      # Step 7b. Test the Docker image was built successfully.
+      - name: Test Docker image
+        run: |
+          docker images | grep datamill
+          echo "✓ Docker image built successfully"
+
       # Step 8. Install Apptainer (Singularity successor) for SIF container build.
       - name: Install Apptainer
         run: |
