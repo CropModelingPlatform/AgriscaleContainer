@@ -22,7 +22,7 @@ AgriscaleContainer provides a reproducible, containerized environment for runnin
 - **APSIM** (Agricultural Production Systems sIMulator) - Process-based model for simulating agricultural systems
 - **DSSAT** (Decision Support System for Agrotechnology Transfer) - Crop modeling and decision support
 - **STICS** (via JavaStics) - Soil-crop simulation model with multi-crop capabilities
-- **CELSIUS:** - CELSIUS model
+- **CELSIUS:** - CEreal and Legume crops Simulator Under Sahelian Environment
 
 ---
 
@@ -171,7 +171,7 @@ Contributions to the **container infrastructure** are welcome! Please:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-**Note:** Modifications to crop models (APSIM, DSSAT, STICS) should be contributed to their respective upstream repositories.
+**Note:** Modifications to crop models (APSIM, DSSAT, STICS, CELSIUS) should be contributed to their respective upstream repositories.
 
 ---
 
@@ -193,6 +193,7 @@ If you use AgriscaleContainer in your research, please cite this repository:
 - **APSIM:** Holzworth et al. (2014). APSIM – Evolution towards a new generation of agricultural systems simulation. *Environmental Modelling & Software*, 62, 327-350.
 - **DSSAT:** Jones et al. (2003). The DSSAT cropping system model. *European Journal of Agronomy*, 18(3-4), 235-265.
 - **STICS:** Brisson et al. (2009). STICS: a generic model for simulating crops and their water and nitrogen balances. *Agronomie*, 18(5-6), 311-346.
+- **CELSIUS:** Ricome et al. (2017). Are subsidies to weather-index insurance the best use of public funds? A bio-economic farm model applied to the Senegalese groundnut basin. Agricultural Systems, 156(May), 149–176. https://doi.org/10.1016/j.agsy.2017.05.015
 
 ---
 
@@ -212,6 +213,7 @@ Container Infrastructure  → MIT License (free for all uses)
 APSIM                    → Academic License (non-commercial)
 DSSAT                    → BSD-3-Clause (free for all uses)
 STICS                    → CeCILL (GPL-compatible)
+CELSIUS                  → MIT
 ```
 
 **For full license details, see [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)**
