@@ -22,7 +22,7 @@ jobs:
     steps:
       # Step 1. Check out the repository.
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Step 1b. Read version (used for the release upload step below).
       - name: Read version
