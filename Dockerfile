@@ -68,7 +68,7 @@ USER root
 RUN rm -rf /var/lib/apt/lists/*
 
 # Application image
-FROM mcr.microsoft.com/dotnet/runtime:6.0-bullseye-slim AS app
+FROM mcr.microsoft.com/dotnet/runtime:7.0-bullseye-slim AS app
 
 # Add .NET Core 3.1 runtime.
 COPY --from=mcr.microsoft.com/dotnet/runtime:5.0 /usr/share/dotnet /usr/share/dotnet
