@@ -129,7 +129,8 @@ RUN apt-get update && apt-get install -y python3 python3-pip sqlite3 libsqlite3-
 
 RUN pip install netcdf4 xarray pandas glob2 numba scipy joblib geopandas rioxarray rasterio \
     && pip install --no-cache dask==2023.1.1 fastparquet pyarrow zarr numcodecs duckdb \
-    && pip install --no-cache --upgrade distributed 
+    && pip install --no-cache --upgrade distributed \
+    && pip install ipykernel
 
 RUN conda --version
 

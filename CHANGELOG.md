@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Updated DSSAT SSAT parameter configuration in this version.
+
 ### Planned
 - GitHub Actions CI/CD pipeline
 - Automated testing framework

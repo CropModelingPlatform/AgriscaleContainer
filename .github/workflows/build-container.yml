@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'version.py'
+      - develop
     tags:
       - 'v*'
   pull_request:
@@ -104,7 +103,7 @@ jobs:
           path: datamill.tar.gz
           retention-days: 7
 
-      # Step 11. Upload datamill.sif to GitHub Release (on version.py change or tag push).
+      # Step 11. Upload datamill.sif to GitHub Release (on push to main or tag push).
       # release.yml runs in parallel and creates the release; this step attaches the SIF.
       - name: Upload SIF to GitHub Release
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
