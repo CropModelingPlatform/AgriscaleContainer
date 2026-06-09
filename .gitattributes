@@ -1,0 +1,32 @@
+# Normalize line endings in the repository
+* text=auto eol=lf
+
+# Keep Windows command scripts in CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Common binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.7z binary
+*.sif binary
+*.dll binary
+*.exe binary
+*.so binary
+*.dylib binary
+*.a binary
+*.o binary
+*.obj binary
+*.pdb binary
+*.db binary
+*.sqlite binary
+*.woff binary
+*.woff2 binary
