@@ -138,7 +138,7 @@ RUN conda --version
 # remove xarray-extras=0.4.2
 
 # INSTALL GIS LIBS (gdal)
-RUN apt-get install -y gdal-bin build-essential openmpi-bin openmpi-doc libopenmpi-dev time strace && rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y gdal-bin build-essential openmpi-bin openmpi-doc libopenmpi-dev time strace numactl && rm -rf /var/lib/apt/lists/*
 
 RUN pip install mpi4py memory_profiler
 # Install ModFileGen from github https://github.com/CropModelingPlatform/ModFileGen.git
@@ -164,18 +164,16 @@ RUN chmod a+x /opt/stics/bin/stics_modulo
 # remove $JAVASTICS_ZIP_FILE
 RUN rm -rf /usr/src/$JAVASTICS_ZIP_FILE
 
-#INSTALL STICS V10
-ARG JAVASTICS_ZIP_FILE10
-COPY $JAVASTICS_ZIP_FILE10 /usr/src
+#INSTALL STICS V11
+ARG JAVASTICS_ZIP_FILE11
+COPY $JAVASTICS_ZIP_FILE11 /usr/src
 RUN ls -l /usr/src
-RUN unzip -q /usr/src/$JAVASTICS_ZIP_FILE10 -d /opt/sticsv10
-RUN mv /opt/sticsv10/JavaSTICS-1.5.2-STICS-10.2.0/* /opt/sticsv10/
-RUN rm -rf /opt/sticsv10/JavaSTICS-1.5.2-STICS-10.2.0
-RUN ls -l /opt/sticsv10
-RUN chmod -R a+rX /opt/sticsv10
-RUN chmod a+x /opt/sticsv10/bin/stics_modulo
-# remove $JAVASTICS_ZIP_FILE10
-RUN rm -rf /usr/src/$JAVASTICS_ZIP_FILE10
+RUN unzip -q /usr/src/$JAVASTICS_ZIP_FILE11 -d /opt/sticsv11
+RUN ls -l /opt/sticsv11
+RUN chmod -R a+rX /opt/sticsv11
+RUN chmod a+x /opt/sticsv11/bin/stics_modulo
+# remove $JAVASTICS_ZIP_FILE11
+RUN rm -rf /usr/src/$JAVASTICS_ZIP_FILE11
 
 #INSTALL DATAMILL
 RUN mkdir -p /usr/share/datamill

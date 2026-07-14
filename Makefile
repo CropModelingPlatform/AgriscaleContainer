@@ -8,7 +8,7 @@ export DOCKER_BUILDKIT=1
 
 USER_WORKSPACE_DIR="${PWD}"
 JAVASTICS_ZIP_FILE_v9_0=JavaSticsInstall.zip
-JAVASTICS_ZIP_FILE_v10_0=JavaSTICS-1.5.2-STICS-10.2.0.zip 
+JAVASTICS_ZIP_FILE_v11_0=JavaSTICS-v11.0.0-rc2.zip
 DSSAT_DIR=dssat_csm_develop
 DSSAT_DIR_latest=dssat-csm-os
 APSIM=ApsimX
@@ -123,7 +123,7 @@ build_dssat: clean_dssat
 dbuild: #build_dssat
 	docker build \
 	--build-arg JAVASTICS_ZIP_FILE=$(JAVASTICS_ZIP_FILE_v9_0) \
-	--build-arg JAVASTICS_ZIP_FILE10=$(JAVASTICS_ZIP_FILE_v10_0) \
+	--build-arg JAVASTICS_ZIP_FILE11=$(JAVASTICS_ZIP_FILE_v11_0) \
 	--build-arg DSSAT_DIR=$(DSSAT_DIR) \
 	--build-arg DSSAT_DIR_latest=$(DSSAT_DIR_latest) \
 	--build-arg APSIM=$(ApsimX) \
