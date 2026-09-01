@@ -7,6 +7,9 @@ __pycache__/
 ApsimX/
 dssat-csm-os/
 dssat_csm_develop/
+old_dssat_csm_develop/
+dssat-csm-os-4.8.5.0/
+dssat-csm-os-4.7.5/
 
 # C extensions
 *.so
