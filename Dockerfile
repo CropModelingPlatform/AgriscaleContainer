@@ -112,8 +112,17 @@ RUN useradd -d /home/arise -m -s /bin/bash arise
 # INSTALL CONDA AND PYTHON 3 PACKAGES
 ENV PATH="/opt/conda/bin:${PATH}"
 ARG PATH="/opt/conda/bin:${PATH}"
-RUN apt-get update && apt-get install --no-install-recommends -y wget zip unzip parallel cdo git
-# && rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/* \
+    && apt-get -o Acquire::Retries=5 update \
+    && apt-get install --no-install-recommends -y \
+        wget \
+        zip \
+        unzip \
+        parallel \
+        cdo \
+        git \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O Miniforge3.sh \
     && bash Miniforge3.sh -b -p /opt/conda \
     && rm -f Miniforge3.sh \
