@@ -112,6 +112,15 @@ RUN useradd -d /home/arise -m -s /bin/bash arise
 # INSTALL CONDA AND PYTHON 3 PACKAGES
 ENV PATH="/opt/conda/bin:${PATH}"
 ARG PATH="/opt/conda/bin:${PATH}"
+
+# Debian 11 (bullseye) is EOL: deb.debian.org rotates/prunes packages, causing
+# intermittent 404s. Pin apt sources to an immutable snapshot.debian.org date
+# so the build is reproducible and unaffected by upstream repo churn.
+RUN printf '%s\n' \
+        'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250801T022237Z bullseye main' \
+        'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20250801T030259Z bullseye-security main' \
+        > /etc/apt/sources.list
+
 RUN rm -rf /var/lib/apt/lists/* \
     && apt-get -o Acquire::Retries=5 update \
     && apt-get install --no-install-recommends -y \
