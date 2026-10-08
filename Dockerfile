@@ -4,6 +4,32 @@ ARG DOTNET_VERSION_5=5.0.1
 ARG DOTNET_VERSION_6=6.0.0
 ARG DOTNET_VERSION_8=8.0.0
 
+# Build CELSIUS V32 from Git
+FROM mcr.microsoft.com/dotnet/sdk:9.0-bookworm-slim AS celsius-v32-builder
+
+ARG CELSIUS_V32_REPO=https://github.com/CropModelingPlatform/CelsiusV32.git
+ARG CELSIUS_V32_REF=main
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y git ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /src/CelsiusV32 \
+    && cd /src/CelsiusV32 \
+    && git init \
+    && git remote add origin "${CELSIUS_V32_REPO}" \
+    && git fetch --depth 1 origin "${CELSIUS_V32_REF}" \
+    && git checkout --detach FETCH_HEAD
+
+RUN dotnet publish \
+    /src/CelsiusV32/CelsiusCli_V32_work/CelsiusCli.vbproj \
+    --configuration Release \
+    --runtime linux-x64 \
+    --self-contained true \
+    -p:PublishSingleFile=false \
+    --output /out/celsiusV32
+
+
 # Installer image
 #FROM amd64/buildpack-deps:buster-curl as installer
 FROM debian:bookworm-slim AS installer
@@ -117,9 +143,16 @@ ARG PATH="/opt/conda/bin:${PATH}"
 # intermittent 404s. Pin apt sources to an immutable snapshot.debian.org date
 # so the build is reproducible and unaffected by upstream repo churn.
 RUN printf '%s\n' \
-        'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250801T022237Z bullseye main' \
-        'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20250801T030259Z bullseye-security main' \
-        > /etc/apt/sources.list
+        'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20250801T022237Z bullseye main' \
+        'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian-security/20250801T030259Z bullseye-security main' \
+        > /etc/apt/sources.list \
+    && printf '%s\n' \
+        'Acquire::Retries "5";' \
+        'Acquire::http::Pipeline-Depth "0";' \
+        'Acquire::https::Pipeline-Depth "0";' \
+        'Acquire::http::No-Cache "true";' \
+        'Acquire::https::No-Cache "true";' \
+        > /etc/apt/apt.conf.d/99snapshot-reliability
 
 RUN rm -rf /var/lib/apt/lists/* \
     && apt-get -o Acquire::Retries=5 update \
@@ -205,6 +238,11 @@ RUN echo "Cache Bust: $CACHE_BUST" mkdir -p /usr/share/celsius
 COPY ./bin/celsius/* /usr/share/celsius/
 RUN chmod a+x /usr/share/celsius/celsius
 RUN ln -s /usr/share/celsius/celsius /usr/bin/
+
+# INSTALL CELSIUS V32
+COPY --from=celsius-v32-builder /out/celsiusV32/ /usr/share/celsiusV32/
+RUN chmod a+x /usr/share/celsiusV32/CelsiusCli \
+    && ln -s /usr/share/celsiusV32/CelsiusCli /usr/bin/celsiusV32
 
 # CREATE AND SET WORKSPACE FOR USER ARISE
 RUN mkdir /work

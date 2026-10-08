@@ -14,6 +14,8 @@ DSSAT_DIR_latest=dssat-csm-os-4.8.5.0
 APSIM=ApsimX
 START_AT=0
 END_AT=-1
+CELSIUS_V32_REPO ?= https://github.com/CropModelingPlatform/CelsiusV32.git
+CELSIUS_V32_REF ?= main
 
 
 
@@ -127,6 +129,8 @@ dbuild: #build_dssat
 	--build-arg DSSAT_DIR=$(DSSAT_DIR) \
 	--build-arg DSSAT_DIR_latest=$(DSSAT_DIR_latest) \
 	--build-arg APSIM=$(ApsimX) \
+	--build-arg CELSIUS_V32_REPO=$(CELSIUS_V32_REPO) \
+	--build-arg CELSIUS_V32_REF=$(CELSIUS_V32_REF) \
     --build-arg CACHE_BUST=$(CACHE_BUST) \
 	--progress=plain \
 	-t $(DOCKER_IMG) .

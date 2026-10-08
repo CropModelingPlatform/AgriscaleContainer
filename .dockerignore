@@ -1,0 +1,29 @@
+# Version-control and local editor metadata
+.git/
+**/.git/
+.github/
+.vscode/
+.idea/
+
+# Container/package artifacts must never be sent back into the build context
+*.sif
+docker_*.tar
+datamill.tar.gz
+
+# Local build and language caches
+**/obj/
+**/build/
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+
+# Sources compiled on the host before `docker build`; only ./bin is copied
+ApsimX/
+src/
+
+# Model checkouts not selected by the current Makefile build arguments
+dssat-csm-os/
+dssat-csm-os-4.7.5/
+
+# Miscellaneous local output
+DonneesFA/
